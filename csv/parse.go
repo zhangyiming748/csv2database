@@ -6,10 +6,15 @@ import (
 )
 
 type Record struct {
-	Role            string
-	RootRoleDesc    string
-	DerivedRole     string
-	DerivedRoleDesc string
+	Username       string // 用户名
+	FullName       string // 全名
+	Role           string // 角色
+	Type           string // 类型
+	AssignmentType string // 分配类型
+	Assignment     string // 分配
+	StartDate      string // 开始日期
+	EndDate        string // 结束日期
+	ShortRoleDesc  string // 简短角色描述
 }
 
 func ParseCSV(filePath string) ([]Record, error) {
@@ -33,15 +38,32 @@ func ParseCSV(filePath string) ([]Record, error) {
 			continue
 		}
 
-		if len(record) < 4 {
+		if len(record) < 10 {
+			continue
+		}
+
+		// 跳过空白行（所有字段都为空）
+		isEmpty := true
+		for _, field := range record {
+			if field != "" {
+				isEmpty = false
+				break
+			}
+		}
+		if isEmpty {
 			continue
 		}
 
 		parsedRecords = append(parsedRecords, Record{
-			Role:            record[0],
-			RootRoleDesc:    record[1],
-			DerivedRole:     record[2],
-			DerivedRoleDesc: record[3],
+			Username:       record[1],
+			FullName:       record[2],
+			Role:           record[3],
+			Type:           record[4],
+			AssignmentType: record[5],
+			Assignment:     record[6],
+			StartDate:      record[7],
+			EndDate:        record[8],
+			ShortRoleDesc:  record[9],
 		})
 	}
 
